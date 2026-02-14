@@ -1,0 +1,271 @@
+generator client {
+  provider   = "prisma-client-js"
+  output     = "../src/generated/prisma"
+  engineType = "client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================
+// AUTH & USERS
+// ============================================
+
+enum UserRole {
+  ADMIN
+  STAFF
+  CUSTOMER
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  role          UserRole  @default(CUSTOMER)
+  firstName     String    @map("first_name")
+  lastName      String    @map("last_name")
+  phone         String?
+  avatar        String?
+  emailVerified DateTime? @map("email_verified")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  addresses Address[]
+  orders    Order[]
+  sessions  Session[]
+  cart      CartItem[]
+
+  @@map("users")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Address {
+  id        String  @id @default(cuid())
+  userId    String  @map("user_id")
+  label     String  @default("Home") // Home, Office, etc.
+  firstName String  @map("first_name")
+  lastName  String  @map("last_name")
+  address1  String
+  address2  String?
+  city      String
+  state     String
+  zipCode   String  @map("zip_code")
+  country   String  @default("US")
+  phone     String?
+  isDefault Boolean @default(false) @map("is_default")
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders Order[]
+
+  @@map("addresses")
+}
+
+// ============================================
+// PRODUCTS & CATEGORIES
+// ============================================
+
+model Category {
+  id            String    @id @default(cuid())
+  parentId      String?   @map("parent_id")
+  name          String
+  slug          String    @unique
+  description   String?
+  imageUrl      String?   @map("image_url")
+  markupPercent Float?    @map("markup_percent") // category-level markup
+  sortOrder     Int       @default(0) @map("sort_order")
+  enabled       Boolean   @default(true)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryTree")
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id                Int      @id @default(autoincrement())
+  categoryId        String?  @map("category_id")
+  sinaliteProductId Int      @map("sinalite_product_id")
+  sku               String   @unique
+  name              String
+  slug              String   @unique
+  description       String?  @db.Text
+  shortDescription  String?  @map("short_description")
+  images            Json     @default("[]") // array of image URLs
+  sinaliteOptions   Json?    @map("sinalite_options") // cached options from API
+  sinaliteVariants  Json?    @map("sinalite_variants") // cached variants
+  markupPercent     Float?   @map("markup_percent") // product-level override
+  minPrice          Float?   @map("min_price") // cached min price
+  maxPrice          Float?   @map("max_price") // cached max price
+  enabled           Boolean  @default(true)
+  featured          Boolean  @default(false)
+  syncedAt          DateTime? @map("synced_at")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  category  Category?  @relation(fields: [categoryId], references: [id])
+  cartItems CartItem[]
+  orderItems OrderItem[]
+
+  @@map("products")
+}
+
+// ============================================
+// CART
+// ============================================
+
+model CartItem {
+  id              String   @id @default(cuid())
+  userId          String   @map("user_id")
+  productId       Int      @map("product_id")
+  quantity        Int      @default(1)
+  selectedOptions Json     @map("selected_options") // { "Stock": "30", "size": "4", ... }
+  files           Json     @default("[]") // uploaded file URLs
+  unitPrice       Float    @map("unit_price")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("cart_items")
+}
+
+// ============================================
+// ORDERS
+// ============================================
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  STRIPE
+  PAYPAL
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model Order {
+  id               String        @id @default(cuid())
+  orderNumber      String        @unique @map("order_number")
+  userId           String        @map("user_id")
+  addressId        String?       @map("address_id")
+  sinaliteOrderId  Int?          @map("sinalite_order_id")
+  status           OrderStatus   @default(PENDING)
+  paymentMethod    PaymentMethod? @map("payment_method")
+  paymentStatus    PaymentStatus @default(PENDING) @map("payment_status")
+  paymentId        String?       @map("payment_id") // Stripe/PayPal ID
+  subtotal         Float         @default(0)
+  shippingCost     Float         @default(0) @map("shipping_cost")
+  tax              Float         @default(0)
+  discount         Float         @default(0)
+  total            Float         @default(0)
+  shippingMethod   String?       @map("shipping_method")
+  trackingNumber   String?       @map("tracking_number")
+  trackingUrl      String?       @map("tracking_url")
+  carrier          String?
+  notes            String?       @db.Text
+  shippingInfo     Json?         @map("shipping_info")
+  billingInfo      Json?         @map("billing_info")
+  sinaliteResponse Json?         @map("sinalite_response")
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+
+  user    User        @relation(fields: [userId], references: [id])
+  address Address?    @relation(fields: [addressId], references: [id])
+  items   OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id              String @id @default(cuid())
+  orderId         String @map("order_id")
+  productId       Int    @map("product_id")
+  productName     String @map("product_name")
+  sku             String
+  quantity        Int
+  selectedOptions Json   @map("selected_options")
+  files           Json   @default("[]")
+  unitPrice       Float  @map("unit_price") // price after markup
+  costPrice       Float  @map("cost_price") // sinalite wholesale price
+  total           Float
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+// ============================================
+// SITE SETTINGS
+// ============================================
+
+model SiteSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value Json
+  group String @default("general") // general, branding, seo, smtp, payments, sinalite
+
+  @@map("site_settings")
+}
+
+// ============================================
+// EMAIL TEMPLATES
+// ============================================
+
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  subject   String
+  htmlBody  String   @map("html_body") @db.Text
+  textBody  String?  @map("text_body") @db.Text
+  variables Json     @default("[]") // available merge tags
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("email_templates")
+}
+
+// ============================================
+// MARKUP RULES
+// ============================================
+
+model MarkupRule {
+  id            String  @id @default(cuid())
+  name          String
+  categorySlug  String? @map("category_slug") // nullable = global rule
+  productSku    String? @map("product_sku") // nullable = category/global rule
+  markupPercent Float   @map("markup_percent")
+  priority      Int     @default(0) // higher = more specific
+  enabled       Boolean @default(true)
+
+  @@unique([categorySlug, productSku])
+  @@map("markup_rules")
+}

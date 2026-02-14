@@ -1,0 +1,465 @@
+/* ═══════════════════════════════════════════════════
+   Customer Account Pages — White Minimalist Theme
+   ═══════════════════════════════════════════════════ */
+
+.account-layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 32px;
+    min-height: 60vh;
+}
+
+/* ─── Sidebar ─────────────────────────────────── */
+
+.account-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.account-sidebar h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 16px;
+    padding: 0 12px;
+}
+
+.account-sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.15s;
+}
+
+.account-sidebar-link:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.account-sidebar-link.active {
+    background: #eff6ff;
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.account-sidebar-link span {
+    font-size: 18px;
+}
+
+.account-signout {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.account-signout button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: none;
+    background: none;
+    color: #ef4444;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.account-signout button:hover {
+    background: #fef2f2;
+}
+
+/* ─── Content ─────────────────────────────────── */
+
+.account-content {
+    min-width: 0;
+}
+
+.account-page-header {
+    margin-bottom: 32px;
+}
+
+.account-page-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 4px;
+}
+
+.account-page-header p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* ─── Cards ───────────────────────────────────── */
+
+.account-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.account-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ─── Form ────────────────────────────────────── */
+
+.account-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.account-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.account-field.full-width {
+    grid-column: 1 / -1;
+}
+
+.account-field label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+}
+
+.account-field input {
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1e293b;
+    transition: border-color 0.15s;
+}
+
+.account-field input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.account-field input:disabled {
+    background: #f8fafc;
+    color: #94a3b8;
+}
+
+.account-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.account-btn-primary {
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: none;
+    background: #2563eb;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.account-btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.account-btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.account-btn-secondary {
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.account-btn-secondary:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+/* ─── Orders Table ────────────────────────────── */
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.orders-table th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #94a3b8;
+    padding: 12px 16px;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.orders-table td {
+    padding: 16px;
+    font-size: 14px;
+    color: #1e293b;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.orders-table tr:hover td {
+    background: #fafbfc;
+}
+
+.order-status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.order-status-badge.processing {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.order-status-badge.shipped {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.order-status-badge.delivered {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.order-status-badge.pending {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.order-status-badge.cancelled {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.order-view-link {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.order-view-link:hover {
+    text-decoration: underline;
+}
+
+/* ─── Order Detail ────────────────────────────── */
+
+.order-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+}
+
+.order-detail-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.order-back-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.order-back-link:hover {
+    color: #2563eb;
+}
+
+/* ─── Timeline ────────────────────────────────── */
+
+.order-timeline {
+    position: relative;
+    padding-left: 28px;
+}
+
+.order-timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: #e2e8f0;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 24px;
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -24px;
+    top: 4px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    border: 2px solid #fff;
+}
+
+.timeline-dot.active {
+    background: #2563eb;
+}
+
+.timeline-dot.completed {
+    background: #22c55e;
+}
+
+.timeline-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 2px;
+}
+
+.timeline-date {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+/* ─── Empty State ─────────────────────────────── */
+
+.account-empty {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.account-empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.account-empty h3 {
+    font-size: 18px;
+    color: #1e293b;
+    margin: 0 0 8px;
+}
+
+.account-empty p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0 0 24px;
+}
+
+/* ─── Success/Error Messages ──────────────────── */
+
+.account-success {
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #15803d;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.account-error {
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+/* ─── Responsive ──────────────────────────────── */
+
+@media (max-width: 768px) {
+    .account-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 24px 16px;
+    }
+
+    .account-sidebar {
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 4px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .account-sidebar h2 {
+        display: none;
+    }
+
+    .account-sidebar-link {
+        white-space: nowrap;
+    }
+
+    .account-signout {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+    }
+
+    .account-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .order-detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}
