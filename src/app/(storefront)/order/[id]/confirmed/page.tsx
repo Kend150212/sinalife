@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import '../../checkout/checkout.css'
+import '../../../checkout/checkout.css'
 
 interface OrderData {
     orderNumber: string
