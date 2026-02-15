@@ -9,7 +9,7 @@ import Stripe from 'stripe'
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY || ''
 
 export const stripe = stripeSecretKey
-    ? new Stripe(stripeSecretKey, { apiVersion: '2025-04-30.basil' })
+    ? new Stripe(stripeSecretKey)
     : null
 
 export const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || ''
