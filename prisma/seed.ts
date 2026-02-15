@@ -1,6 +1,5 @@
 import { PrismaClient } from '../src/generated/prisma'
 import bcrypt from 'bcryptjs'
-import { defaultEmailTemplates } from '../src/lib/email/templates'
 
 const prisma = new PrismaClient()
 
@@ -98,19 +97,6 @@ async function main() {
         })
     }
     console.log('✅ Categories seeded')
-
-    // 4. Seed email templates
-    for (const template of defaultEmailTemplates) {
-        await prisma.emailTemplate.upsert({
-            where: { slug: template.slug },
-            update: {},
-            create: {
-                ...template,
-                variables: JSON.parse(template.variables as string),
-            },
-        })
-    }
-    console.log('✅ Email templates seeded')
 
     // 5. Seed global markup rule
     await prisma.markupRule.upsert({
