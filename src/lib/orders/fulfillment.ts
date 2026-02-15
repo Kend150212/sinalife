@@ -84,7 +84,7 @@ export async function submitToSinalite(orderId: string): Promise<{
             data: {
                 sinaliteOrderId: response.orderId,
                 status: 'PROCESSING',
-                sinaliteResponse: response as unknown as Record<string, unknown>,
+                sinaliteResponse: JSON.parse(JSON.stringify(response)),
             },
         })
 
